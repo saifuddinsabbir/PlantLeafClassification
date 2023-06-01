@@ -1,0 +1,86 @@
+body {
+    margin-top: 80px;
+    background-image: url("images/greenhelp.jpg");
+    background-size:500px;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.main-container {
+    font-family: "ROBOTO", sans-serif;
+    width: 80%;
+    height: 100px;
+}
+
+.main-container .wrapper1 {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: aliceblue;
+    border-radius: 10px;
+    box-shadow: 0 4px 40px -8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-around;
+}
+
+.main-container .wrapper2 {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    background-color: aliceblue;
+    border-radius: 10px;
+    box-shadow: 0 4px 40px -8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.main-container .wrapper1 .images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    margin-left: 20px;
+}
+
+.main-container .wrapper2 .images {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    margin-left: 20px;
+}
+
+.main-container .wrapper1 .images img {
+    width: 55px;
+    height: 55px;
+}
+
+.main-container .wrapper2 .images img {
+    width: 55px;
+    height: 55px;
+}
+
+.main-container .wrapper1 .description {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    width: 350px;
+}
+
+.main-container .wrapper2 .description {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    width: 350px;
+}
+
+.main-container .wrapper1 .description h1 {
+    font-size: 23px;
+}
+
+.main-container .wrapper2 .description h1 {
+    font-size: 23px;
+}

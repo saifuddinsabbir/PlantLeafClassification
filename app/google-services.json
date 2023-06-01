@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1087811737258",
+    "project_id": "plantleafclassification-d44f8",
+    "storage_bucket": "plantleafclassification-d44f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087811737258:android:b4a4e9802ccb844955e2d3",
+        "android_client_info": {
+          "package_name": "com.example.plantleafclassification"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087811737258-ofm5t1gk922v5gtrvm2ud9r02jp5n9bj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoK8rn7CtNWL7X-NiXatGCZBUja6bmGdg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087811737258-ofm5t1gk922v5gtrvm2ud9r02jp5n9bj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

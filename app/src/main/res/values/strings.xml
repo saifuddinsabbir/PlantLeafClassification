@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">PlantLeafClassification</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="feedbackCardDescText">A health app is categorized by the FDA as mobile software that diagnoses, tracks, or treats disease. A wellness app is a mobile software that enhances or tracks the overall health of the user.
+    </string>
+
+    <string name="feedbackPostCommentText">This apps is very useful to me. I am vey happy to this. But think, if many Prescription saved option is have so that very useful to us. Thanks</string>
+
+
+</resources>

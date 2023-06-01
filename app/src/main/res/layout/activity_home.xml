@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    tools:context=".Home">
+
+
+    <LinearLayout
+        android:layout_width="364dp"
+        android:layout_height="144dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="61dp"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:text="Identify leaf and"
+            android:textSize="30sp">
+        </TextView>
+
+        <TextView
+            android:layout_width="364dp"
+            android:layout_height="100dp"
+            android:fontFamily="cursive"
+            android:gravity="center"
+            android:text="get information about it's condition. "
+            android:textSize="30sp">
+        </TextView>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/homeImage"
+        android:layout_width="305dp"
+        android:layout_height="336dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/home">
+    </ImageView>
+
+    <Button
+        android:id="@+id/start_btn"
+        android:layout_width="307dp"
+        android:layout_height="52dp"
+        android:layout_gravity="center"
+        android:background="@drawable/buttonshape"
+        android:gravity="center"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:text="Getting started"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+
+</LinearLayout>

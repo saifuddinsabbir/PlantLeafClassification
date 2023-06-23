@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -35,8 +37,13 @@ public class CommunityFragment extends Fragment {
 
     DatabaseReference referenceUser ,referenceCommunity;
 
+    String key = null, startKey = null;
+
     List<Post> postList;
     PostAdapter postAdapter;
+
+    Button prev_btn, one, next_btn;
+    int pageNumber = 1;
 
     SessionManager sessionManager;
     HashMap<String, String> userDetails;
@@ -57,6 +64,31 @@ public class CommunityFragment extends Fragment {
         postListRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
         postListRecycleView.setHasFixedSize(true);
 
+        postAdapter = new PostAdapter(getContext());
+        postListRecycleView.setAdapter(postAdapter);
+
+        loadData();
+
+        prev_btn = fragment_view.findViewById(R.id.prev_btn);
+        one = fragment_view.findViewById(R.id.one);
+        next_btn = fragment_view.findViewById(R.id.next_btn);
+
+        next_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageNumber++;
+                loadData();
+            }
+        });
+
+        prev_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageNumber--;
+                loadPrevData();
+            }
+        });
+
         addPostButton = fragment_view.findViewById(R.id.addPostButtonId);
         addPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +103,104 @@ public class CommunityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        fetchPostsFromDB();
+//        fetchPostsFromDB();
+    }
+
+    private void loadData() {
+        int contentSize = 2;
+
+//        referenceFeedbacks = FirebaseDatabase.getInstance().getReference("feedbacks");
+
+        Query query;
+        if(key == null) {
+            query = referenceCommunity.orderByKey().limitToFirst(contentSize);
+        } else {
+            query = referenceCommunity.orderByKey().startAfter(key).limitToFirst(contentSize);
+        }
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Post> feedbackList = new ArrayList<>();
+                for(DataSnapshot feedbackSnap : snapshot.getChildren()) {
+                    Post feedback = feedbackSnap.getValue(Post.class);
+                    if(feedbackList.isEmpty()) {
+                        startKey = feedbackSnap.getKey();
+                    }
+                    feedbackList.add(feedback);
+                    key = feedbackSnap.getKey();
+                }
+
+                one.setText(pageNumber+"");
+
+                if(pageNumber == 1) {
+                    prev_btn.setEnabled(false);
+                } else {
+                    prev_btn.setEnabled(true);
+                }
+
+                if(feedbackList.size() < contentSize) {
+                    next_btn.setEnabled(false);
+                } else {
+                    next_btn.setEnabled(true);
+                }
+
+//                Toast.makeText(Feedback.this, feedbackList.size()+" ", Toast.LENGTH_SHORT).show();
+                postAdapter.setItems((ArrayList<Post>) feedbackList);
+                postAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private void loadPrevData() {
+        int contentSize = 2;
+
+        Query query;
+        if(key == null) {
+            query = referenceCommunity.orderByKey().limitToFirst(contentSize);
+        } else {
+            query = referenceCommunity.orderByKey().endBefore(startKey).limitToLast(contentSize);
+        }
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Post> feedbackList = new ArrayList<>();
+                for(DataSnapshot feedbackSnap : snapshot.getChildren()) {
+                    Post feedback = feedbackSnap.getValue(Post.class);
+                    if(feedbackList.isEmpty()) {
+                        startKey = feedbackSnap.getKey();
+                    }
+                    feedbackList.add(feedback);
+                    key = feedbackSnap.getKey();
+                }
+
+                one.setText(pageNumber+"");
+
+                if(pageNumber == 1) {
+                    prev_btn.setEnabled(false);
+                } else {
+                    prev_btn.setEnabled(true);
+                }
+
+                if(feedbackList.size() < contentSize) {
+                    next_btn.setEnabled(false);
+                } else {
+                    next_btn.setEnabled(true);
+                }
+
+                postAdapter.setItems((ArrayList<Post>) feedbackList);
+                postAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     private void fetchPostsFromDB() {
@@ -84,14 +213,6 @@ public class CommunityFragment extends Fragment {
                     post = postSnap.getValue(Post.class);
                     postList.add(post);
                 }
-
-                //post = new Post("", 0, "", "", 0, 0);
-                //postList.add(post);
-
-
-
-                postAdapter = new PostAdapter(getContext(), postList);
-                postListRecycleView.setAdapter(postAdapter);
             }
 
             @Override

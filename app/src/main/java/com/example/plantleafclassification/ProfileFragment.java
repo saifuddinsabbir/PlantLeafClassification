@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -23,8 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -42,6 +46,8 @@ public class ProfileFragment extends Fragment {
 
     DatabaseReference referenceUser;
     StorageReference referencePostImage;
+
+    String districtFromDB, subDistrictFromDB;
 
     SessionManager sessionManager;
     HashMap<String, String> userDetails;
@@ -110,11 +116,27 @@ public class ProfileFragment extends Fragment {
         emailProfileFreg.setText(userDetails.get(SessionManager.KEY_EMAIL));
         contactProfileFreg.setText(userDetails.get(SessionManager.KEY_CONTACT));
         dobProfileFreg.setText(userDetails.get(SessionManager.KEY_DOB));
-        if(userDetails.get(SessionManager.KEY_ADDRESS) != "-" && userDetails.get(SessionManager.KEY_ADDRESS) != null) {
-            addressProfileFreg.setText(userDetails.get(SessionManager.KEY_ADDRESS));
-        } else {
-            addressProfileFreg.setText("No Address");
-        }
+//        if(userDetails.get(SessionManager.KEY_ADDRESS) != "-" && userDetails.get(SessionManager.KEY_ADDRESS) != null) {
+//            addressProfileFreg.setText(userDetails.get(SessionManager.KEY_ADDRESS));
+//        } else {
+//            addressProfileFreg.setText("No Address");
+//        }
+
+        referenceUser = FirebaseDatabase.getInstance().getReference("users").child(userDetails.get(SessionManager.KEY_USERNAME));
+        referenceUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                districtFromDB =  snapshot.child("district").getValue(String.class);
+                subDistrictFromDB =  snapshot.child("subDistrict").getValue(String.class);
+                addressProfileFreg.setText(userDetails.get(SessionManager.KEY_ADDRESS) +", " + subDistrictFromDB +", "+ districtFromDB );
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
 

@@ -16,6 +16,9 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -39,6 +42,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -68,7 +72,15 @@ public class EditProfile extends AppCompatActivity {
             phoneNoFromDB, phoneNoFromET,
             dateOfBirthFromDB, dateOfBirthFromET,
             addressFromDB, addressFromET,
-            passwordFromDB, passwordFromET;
+            passwordFromDB, passwordFromET,
+            districtFromDB, districtFromET,
+            subDistrictFromDB, subDistrictFromET;
+
+    AutoCompleteTextView formDistrictAutoCom, formSubDistrictAutoCom;
+    DatabaseReference referenceLocation;
+    ArrayList<String> spinnerList, spinnerList2;
+    ArrayAdapter<String> adapter, adapter2;
+    String district, subDistrict;
 
     Boolean isAnyValueChanged, finished = true;
 
@@ -89,7 +101,6 @@ public class EditProfile extends AppCompatActivity {
         userNameGlobal = userDetails.get(SessionManager.KEY_USERNAME);
 
         referenceUser = FirebaseDatabase.getInstance().getReference("users").child(userDetails.get(SessionManager.KEY_USERNAME));
-        referencePostImage = FirebaseStorage.getInstance().getReference("profile_pic").child(userDetails.get(SessionManager.KEY_USERNAME));
 
         reference = FirebaseDatabase.getInstance().getReference("users");
         checkUser = reference.orderByChild("userName").equalTo(userNameGlobal);
@@ -104,6 +115,8 @@ public class EditProfile extends AppCompatActivity {
         profileAddressInputLayout = findViewById(R.id.profileAddressInputLayoutId);
         profilePasswordInputLayout = findViewById(R.id.profilePasswordInputLayoutId);
         updateProfileButton = findViewById(R.id.updateProfileButtonId);
+        formDistrictAutoCom = findViewById(R.id.formDistrictAutoComId);
+        formSubDistrictAutoCom = findViewById(R.id.formUpazilaAutoComId);
 
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(1500);
@@ -111,6 +124,37 @@ public class EditProfile extends AppCompatActivity {
         anim.setRepeatMode(Animation.REVERSE);
         anim.setRepeatCount(Animation.INFINITE);
         profileImage.setAnimation(anim);
+
+        spinnerList = new ArrayList<>();
+        spinnerList2 = new ArrayList<>();
+
+        adapter = new ArrayAdapter<String>(EditProfile.this, R.layout.drop_down_item, spinnerList);
+        adapter2 = new ArrayAdapter<String>(EditProfile.this, R.layout.drop_down_item, spinnerList2);
+
+        formDistrictAutoCom.setAdapter(adapter);
+        formSubDistrictAutoCom.setAdapter(adapter2);
+
+        showData();
+
+        formDistrictAutoCom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                spinnerList2.clear();
+                district = formDistrictAutoCom.getText().toString();
+                districtFromET = district;
+                Toast.makeText(EditProfile.this, district, Toast.LENGTH_SHORT).show();
+                showSecondList();
+            }
+        });
+
+        formSubDistrictAutoCom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                subDistrict = formSubDistrictAutoCom.getText().toString();
+                subDistrictFromET = subDistrict;
+                //Toast.makeText(EditProfile.this, district + " " + subDistrict , Toast.LENGTH_SHORT).show();
+            }
+        });
 
         setValuesFromDatabaseMethod();
 
@@ -134,6 +178,45 @@ public class EditProfile extends AppCompatActivity {
         });
     }
 
+    private void showData() {
+        referenceLocation = FirebaseDatabase.getInstance().getReference("location");
+        referenceLocation.child("district").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot item : snapshot.getChildren()) {
+                    if(!item.getValue().toString().equals("district")) {
+                        spinnerList.add(item.getValue().toString());
+                    }
+                }
+                adapter.notifyDataSetChanged();;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void showSecondList() {
+        referenceLocation.child(district).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot item : snapshot.getChildren()) {
+                    spinnerList2.add(item.getValue().toString());
+                }
+                adapter2.notifyDataSetChanged();;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
 
     private void setValuesFromDatabaseMethod() {
         if(sessionManager.getProfileImage()!="" && sessionManager.getProfileImage() != null) {
@@ -154,6 +237,21 @@ public class EditProfile extends AppCompatActivity {
         dateOfBirthFromDB = userDetails.get(SessionManager.KEY_DOB);
         profileDateOfBirthInputLayer.getEditText().setText(dateOfBirthFromDB);
 
+        referenceUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                districtFromDB =  snapshot.child("district").getValue(String.class);
+                subDistrictFromDB =  snapshot.child("subDistrict").getValue(String.class);
+//                formDistrictAutoCom.setText(districtFromDB);
+//                formSubDistrictAutoCom.setText(subDistrictFromDB);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         addressFromDB = userDetails.get(SessionManager.KEY_ADDRESS);
         profileAddressInputLayout.getEditText().setText(addressFromDB);
 
@@ -172,13 +270,16 @@ public class EditProfile extends AppCompatActivity {
                         Uri photoUri = result.getData().getData();
                         profileImage.setImageURI(photoUri);
 
+                        referencePostImage = FirebaseStorage.getInstance().getReference().child(userDetails.get(SessionManager.KEY_USERNAME));
                         referencePostImage.putFile(photoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Toast.makeText(getApplicationContext(), userDetails.get(SessionManager.KEY_USERNAME), Toast.LENGTH_SHORT).show();
                                 try {
                                     referencePostImage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
+                                            Toast.makeText(getApplicationContext(), "uploaded", Toast.LENGTH_SHORT).show();
                                             referenceUser.child("dp").setValue(uri.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
@@ -220,6 +321,8 @@ public class EditProfile extends AppCompatActivity {
         changePhoneNo();
         changeDateOfBirth();
         changeAddress();
+        changeDistrict();
+        changeSubDistrict();
         changePassword();
 
         if (isAnyValueChanged) {
@@ -280,6 +383,22 @@ public class EditProfile extends AppCompatActivity {
         }
     }
 
+    private void changeDistrict() {
+        districtFromET = formDistrictAutoCom.getText().toString();
+        if (!districtFromET.isEmpty() && !districtFromDB.equals(districtFromET)) {
+            reference.child(userNameGlobal).child("district").setValue(districtFromET);
+            isAnyValueChanged = true;
+        }
+    }
+
+    private void changeSubDistrict() {
+        subDistrictFromET = formSubDistrictAutoCom.getText().toString();
+        if (!subDistrictFromET.isEmpty() && !subDistrictFromDB.equals(subDistrictFromET)) {
+            reference.child(userNameGlobal).child("subDistrict").setValue(subDistrictFromET);
+            isAnyValueChanged = true;
+        }
+    }
+
 
     private void changeAddress() {
         addressFromET = profileAddressInputLayout.getEditText().getText().toString();
@@ -320,7 +439,7 @@ public class EditProfile extends AppCompatActivity {
                 @Override
                 public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                     i1 += 1;
-                    String s = "" + day + "/" + i1 + "/" + i + "";
+                    String s = "" + i2 + "/" + i1 + "/" + i + "";
                     profileDateOfBirthInputLayer.getEditText().setText(s);
                 }
             };

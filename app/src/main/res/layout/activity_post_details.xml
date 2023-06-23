@@ -189,9 +189,10 @@
 
                 <ImageView
                     android:id="@+id/postCardLikeButtonId"
-                    android:layout_width="25dp"
+                    android:layout_width="28dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/love5"
+                    android:src="@drawable/love11"
+                    android:padding="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

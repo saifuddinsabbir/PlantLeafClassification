@@ -1,12 +1,13 @@
 package com.example.plantleafclassification;
 
 public class UserHelperClass {
-    String fullName, userName, dateOfBirth, email, contact, password, gender, address;
+    String fullName, userName, dateOfBirth, email, contact, password, gender, district, subDistrict, address;
 
     public UserHelperClass() {
     }
 
-    public UserHelperClass(String fullName, String userName, String dateOfBirth, String email, String contact, String password, String gender, String address) {
+
+    public UserHelperClass(String fullName, String userName, String dateOfBirth, String email, String contact, String password, String gender, String district, String subDistrict, String address) {
         this.fullName = fullName;
         this.userName = userName;
         this.dateOfBirth = dateOfBirth;
@@ -14,6 +15,8 @@ public class UserHelperClass {
         this.contact = contact;
         this.password = password;
         this.gender = gender;
+        this.district = district;
+        this.subDistrict = subDistrict;
         this.address = address;
     }
 
@@ -71,6 +74,22 @@ public class UserHelperClass {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getSubDistrict() {
+        return subDistrict;
+    }
+
+    public void setSubDistrict(String subDistrict) {
+        this.subDistrict = subDistrict;
     }
 
     public String getAddress() {

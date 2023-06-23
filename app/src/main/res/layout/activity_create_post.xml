@@ -110,7 +110,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-
                 android:elevation="10dp"
                 android:text="\@kona"
                 android:textSize="15sp"

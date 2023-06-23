@@ -180,9 +180,9 @@ public class PostDetails extends AppCompatActivity {
                         userOnceLiked = true;
                         userLiked = d;
                         if(d) {
-                            feedbackPostLikeButton.setImageResource(R.drawable.love3);
+                            feedbackPostLikeButton.setImageResource(R.drawable.loved3);
                         } else {
-                            feedbackPostLikeButton.setImageResource(R.drawable.love5);
+                            feedbackPostLikeButton.setImageResource(R.drawable.love11);
                         }
                     }
 
@@ -236,18 +236,18 @@ public class PostDetails extends AppCompatActivity {
         if (userLiked) {
             referenceLikesFetch = FirebaseDatabase.getInstance().getReference("likes").child(postKeyGlobal);
             referenceLikesFetch.child(userNameGlobal).child("liked").setValue(false);
-            feedbackPostLikeButton.setImageResource(R.drawable.love5);
+            feedbackPostLikeButton.setImageResource(R.drawable.love11);
             Toast.makeText(this, "Uniked", Toast.LENGTH_SHORT).show();
         } else if (userOnceLiked) {
             referenceLikesFetch = FirebaseDatabase.getInstance().getReference("likes").child(postKeyGlobal);
             referenceLikesFetch.child(userNameGlobal).child("liked").setValue(true);
-            feedbackPostLikeButton.setImageResource(R.drawable.love3);
+            feedbackPostLikeButton.setImageResource(R.drawable.loved3);
             Toast.makeText(this, "Liked", Toast.LENGTH_SHORT).show();
         } else {
             referenceLikes = FirebaseDatabase.getInstance().getReference("likes").child(postKeyGlobal);
             Like like = new Like(userNameGlobal, true);
             referenceLikes.child(userNameGlobal).setValue(like);
-            feedbackPostLikeButton.setImageResource(R.drawable.love3);
+            feedbackPostLikeButton.setImageResource(R.drawable.loved3);
             Toast.makeText(this, "Liked", Toast.LENGTH_SHORT).show();
         }
     }

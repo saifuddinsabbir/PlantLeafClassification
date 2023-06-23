@@ -35,14 +35,21 @@ import java.util.Locale;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> {
 
     Context mContext;
-    List<Post> mData;
+//    List<Post> mData;
+    ArrayList<Post> mData = new ArrayList<>();
     HashMap<String, Boolean> postsLike = new HashMap<String, Boolean>();
     SessionManager sessionManager;
     HashMap<String, String> userDetails;
 
-    public PostAdapter(Context mContext, List<Post> mData) {
+    public PostAdapter(Context mContext) {
         this.mContext = mContext;
-        this.mData = mData;
+//        this.mData = mData;
+    }
+
+    public void setItems(ArrayList<Post> data)
+    {
+        mData.clear();
+        mData.addAll(data);
     }
 
     @NonNull

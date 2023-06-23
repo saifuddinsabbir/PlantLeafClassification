@@ -459,10 +459,12 @@ public class Signup extends AppCompatActivity {
         String contact = signUpPhoneNoTextInputLayout.getEditText().getText().toString();
         String dateOfBirth = date;
         String gender = "-";
+        String district = "District";
+        String subDistrict = "SubDistrict";
         String address = "-";
         String password = signupPasswordTextInputLayout.getEditText().getText().toString();
 
-        UserHelperClass helperClass = new UserHelperClass(fullName, userName, dateOfBirth, email, contact, password, gender, address);
+        UserHelperClass helperClass = new UserHelperClass(fullName, userName, dateOfBirth, email, contact, password, gender, district, subDistrict, address);
 
         userReference.child(userName).setValue(helperClass);
 

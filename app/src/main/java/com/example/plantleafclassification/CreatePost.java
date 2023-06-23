@@ -88,9 +88,9 @@ public class CreatePost extends AppCompatActivity {
         writePostImage = findViewById(R.id.writePostImageId);
         addImage = findViewById(R.id.addImageId);
 
-        if(!sessionManager.getProfileImage().equals(null)) {
-            Picasso.get().load(sessionManager.getProfileImage()).into(writePostUserImage);
-        }
+//        if(!sessionManager.getProfileImage().equals(null)) {
+//            Picasso.get().load(sessionManager.getProfileImage()).into(writePostUserImage);
+//        }
 
         writePostProgressBar.setVisibility(View.INVISIBLE);
         writePostRatingFace.setVisibility(View.INVISIBLE);

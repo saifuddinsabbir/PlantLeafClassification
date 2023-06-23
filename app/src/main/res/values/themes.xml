@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.PlantLeafClassification" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.PlantLeafClassification" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#007500</item>
         <item name="colorOnPrimary">#007500</item>
